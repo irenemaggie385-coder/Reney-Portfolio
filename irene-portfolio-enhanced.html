@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Irene Magdaline Awuor — Health Records Organizer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a18;
+    --cream: #f7f4ee;
+    --sage: #4a6741;
+    --sage-light: #e8efe7;
+    --sage-mid: #c2d4bf;
+    --warm: #b5956a;
+    --warm-light: #f5ede0;
+    --muted: #7a7a72;
+    --border: #dedad2;
+    --red: #c0392b;
+    --blue: #2563a8;
+    --blue-light: #e8f0fb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.7; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 3rem;
+    background: rgba(247,244,238,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; letter-spacing: 0.01em; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 13px; font-weight: 500; letter-spacing: 0.04em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--sage); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem; border-right: 1px solid var(--border); }
+  .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+  .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--sage); }
+  .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem; color: var(--ink); }
+  .hero-title em { font-style: italic; color: var(--sage); }
+  .hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 420px; margin-bottom: 2.5rem; line-height: 1.8; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--sage); color: #fff; font-size: 13px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 14px 28px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .hero-cta:hover { background: #3a5232; transform: translateY(-1px); }
+  .hero-right { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem; background: var(--sage-light); }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--sage-mid); border: 1px solid var(--sage-mid); margin-bottom: 2.5rem; }
+  .stat-cell { background: var(--sage-light); padding: 1.75rem 1.5rem; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 2.4rem; line-height: 1; color: var(--sage); margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0.03em; }
+  .credential-list { list-style: none; }
+  .credential-list li { font-size: 13px; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--sage-mid); display: flex; gap: 12px; align-items: flex-start; font-weight: 500; }
+  .credential-list li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 3.5rem; }
+  .section-num { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 1rem; color: var(--warm); }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 3vw, 2.4rem); letter-spacing: -0.01em; color: var(--ink); }
+
+  /* THE PROBLEM */
+  .problem-section { background: var(--ink); color: var(--cream); }
+  .problem-section .section-title { color: var(--cream); }
+  .problem-section .section-num { color: var(--warm); }
+  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: #333330; border: 1px solid #333330; }
+  .problem-card { background: #242422; padding: 2rem 1.75rem; }
+  .problem-icon { width: 36px; height: 36px; background: var(--warm); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 16px; }
+  .problem-card h3 { font-size: 14px; font-weight: 500; color: var(--cream); margin-bottom: 8px; letter-spacing: 0.02em; }
+  .problem-card p { font-size: 13px; color: #888883; line-height: 1.65; }
+
+  /* SERVICES */
+  .services-section { background: var(--cream); }
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); }
+  .service-item { padding: 2.5rem; border-bottom: 1px solid var(--border); }
+  .service-item:nth-child(odd) { border-right: 1px solid var(--border); }
+  .service-tag { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; background: var(--sage-light); color: var(--sage); margin-bottom: 1rem; }
+  .service-item h3 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-bottom: 10px; color: var(--ink); }
+  .service-item p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .process-section { background: var(--warm-light); }
+  .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; }
+  .process-steps::before { content: ''; position: absolute; top: 28px; left: 10%; right: 10%; height: 1px; background: var(--warm); z-index: 0; }
+  .process-step { text-align: center; padding: 0 1rem; position: relative; z-index: 1; }
+  .step-circle { width: 56px; height: 56px; border-radius: 50%; background: var(--cream); border: 2px solid var(--warm); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--warm); }
+  .process-step h4 { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .process-step p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  /* WHO I HELP */
+  .clients-section { background: var(--sage); color: #fff; }
+  .clients-section .section-title { color: #fff; }
+  .clients-section .section-num { color: var(--sage-mid); }
+  .client-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .client-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 2rem 1.5rem; }
+  .client-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; color: #fff; }
+  .client-card p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.65; }
+
+  /* ===================== BEFORE & AFTER — CASE STUDIES ===================== */
+  .case-section { background: var(--cream); }
+  .case-intro { max-width: 680px; font-size: 1.05rem; color: var(--muted); line-height: 1.8; margin-bottom: 3.5rem; }
+  .case-intro strong { color: var(--ink); }
+
+  /* Simple before/after overview */
+  .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); margin-bottom: 4rem; }
+  .case-before, .case-after { padding: 2.5rem; }
+  .case-before { border-right: 1px solid var(--border); background: #faf7f2; }
+  .case-after { background: var(--sage-light); }
+  .case-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; }
+  .case-before .case-label { color: var(--red); }
+  .case-after .case-label { color: var(--sage); }
+  .case-before .case-label::before { content: '✕'; font-size: 12px; }
+  .case-after .case-label::before { content: '✓'; font-size: 12px; }
+  .case-item { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .case-item:last-child { border-bottom: none; }
+  .case-item span { color: var(--muted); line-height: 1.55; }
+  .case-before .case-item::before { content: '—'; color: var(--red); flex-shrink: 0; }
+  .case-after .case-item::before { content: '→'; color: var(--sage); flex-shrink: 0; }
+
+  /* CASE STUDY CARDS */
+  .case-studies-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .case-studies-title .cs-badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--warm-light);
+    color: var(--warm);
+    border: 1px solid var(--warm);
+    padding: 3px 10px;
+  }
+
+  .cs-card {
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+    overflow: hidden;
+  }
+  .cs-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.75rem 2rem;
+    background: var(--ink);
+  }
+  .cs-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .cs-patient-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--cream); margin-bottom: 3px; }
+  .cs-patient-meta { font-size: 12px; color: #888; }
+  .cs-status-pill {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.07em;
+    text-transform: uppercase; padding: 5px 12px;
+    background: rgba(74,103,65,0.3); color: #7db874; border: 1px solid rgba(74,103,65,0.4);
+    white-space: nowrap;
+  }
+
+  .cs-body { padding: 0; }
+
+  /* Dashboard tabs */
+  .cs-tabs { display: flex; border-bottom: 1px solid var(--border); background: #faf7f2; }
+  .cs-tab {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.05em;
+    text-transform: uppercase; padding: 14px 22px;
+    border: none; background: none;
+    color: var(--muted); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .cs-tab.active { color: var(--sage); border-bottom-color: var(--sage); background: #fff; }
+  .cs-tab:hover:not(.active) { color: var(--ink); }
+
+  .cs-panel { display: none; padding: 2rem; }
+  .cs-panel.active { display: block; }
+
+  /* Summary panel */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.75rem; }
+  .summary-metric {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1rem;
+  }
+  .metric-label { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .metric-value { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--ink); line-height: 1; margin-bottom: 3px; }
+  .metric-sub { font-size: 11px; color: var(--muted); }
+  .metric-good .metric-value { color: var(--sage); }
+  .metric-warn .metric-value { color: #d97706; }
+  .metric-alert .metric-value { color: var(--red); }
+
+  /* Records table */
+  .records-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .records-table th { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border); background: #faf7f2; }
+  .records-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: top; }
+  .records-table tr:last-child td { border-bottom: none; }
+  .records-table tr:hover td { background: var(--sage-light); }
+  .rec-badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 8px; letter-spacing: 0.04em; }
+  .rec-lab { background: var(--blue-light); color: var(--blue); }
+  .rec-rx { background: var(--warm-light); color: #92681a; }
+  .rec-note { background: var(--sage-light); color: var(--sage); }
+  .rec-discharge { background: #fce8e8; color: var(--red); }
+  .rec-imaging { background: #f0eafa; color: #6b3fa0; }
+
+  /* Vitals trend chart */
+  .trend-chart-wrap { margin-top: 1rem; }
+  .trend-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .trend-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .trend-legend { display: flex; gap: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; border-bottom: 1px solid var(--border); padding-bottom: 0; margin-bottom: 8px; }
+  .bar-group { display: flex; align-items: flex-end; gap: 2px; flex: 1; }
+  .bar { border-radius: 2px 2px 0 0; min-width: 14px; transition: opacity 0.2s; cursor: default; position: relative; }
+  .bar:hover::after { content: attr(data-val); position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 10px; background: var(--ink); color: #fff; padding: 2px 6px; white-space: nowrap; z-index: 10; }
+  .bar-systolic { background: var(--sage); }
+  .bar-diastolic { background: var(--sage-mid); }
+  .bar-month-labels { display: flex; gap: 6px; }
+  .month-label { flex: 1; text-align: center; font-size: 10px; color: var(--muted); }
+
+  /* Prescriptions */
+  .rx-list { display: grid; gap: 12px; }
+  .rx-item { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; background: var(--cream); border: 1px solid var(--border); }
+  .rx-icon { width: 34px; height: 34px; background: var(--warm-light); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .rx-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .rx-detail { font-size: 12px; color: var(--muted); }
+  .rx-status { font-size: 10px; font-weight: 500; padding: 3px 9px; letter-spacing: 0.05em; }
+  .rx-active { background: var(--sage-light); color: var(--sage); }
+  .rx-ended { background: #f5f5f3; color: #aaa; }
+
+  /* Notes timeline */
+  .notes-timeline { position: relative; padding-left: 24px; }
+  .notes-timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  .note-entry { position: relative; margin-bottom: 1.5rem; }
+  .note-entry::before { content: ''; position: absolute; left: -20px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--sage); border: 2px solid var(--cream); box-shadow: 0 0 0 1px var(--sage); }
+  .note-date { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--warm); margin-bottom: 4px; }
+  .note-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .note-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* TOOLS SECTION */
+  .tools-section { background: var(--ink); }
+  .tools-section .section-title { color: var(--cream); }
+  .tools-section .section-num { color: var(--warm); }
+  .tools-intro { font-size: 14px; color: #888; max-width: 600px; margin-bottom: 2.5rem; line-height: 1.7; }
+  .tools-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: #2a2a28; border: 1px solid #2a2a28; }
+  .tools-cat { background: #1e1e1c; padding: 2rem 1.75rem; }
+  .tools-cat-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm); margin-bottom: 1.25rem; padding-bottom: 10px; border-bottom: 1px solid #2a2a28; }
+  .tool-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #272725; }
+  .tool-item:last-child { border-bottom: none; }
+  .tool-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage-mid); flex-shrink: 0; }
+  .tool-name { font-size: 13px; color: #ccc; }
+  .tool-desc { font-size: 11px; color: #666; margin-top: 2px; }
+
+  /* PRICING */
+  .pricing-section { background: var(--ink); }
+  .pricing-section .section-title { color: var(--cream); }
+  .pricing-section .section-num { color: var(--warm); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid #333; }
+  .price-card { padding: 2.5rem 2rem; border-right: 1px solid #333; position: relative; }
+  .price-card:last-child { border-right: none; }
+  .price-card.featured { background: var(--sage); }
+  .price-tier { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+  .price-card:not(.featured) .price-tier { color: var(--warm); }
+  .price-card.featured .price-tier { color: var(--sage-light); }
+  .price-name { font-family: 'DM Serif Display', serif; font-size: 1.35rem; margin-bottom: 0.5rem; }
+  .price-card:not(.featured) .price-name { color: var(--cream); }
+  .price-card.featured .price-name { color: #fff; }
+  .price-amount { font-family: 'DM Serif Display', serif; font-size: 2.2rem; line-height: 1; margin: 1rem 0 0.25rem; }
+  .price-card:not(.featured) .price-amount { color: var(--cream); }
+  .price-card.featured .price-amount { color: #fff; }
+  .price-freq { font-size: 12px; margin-bottom: 1.5rem; }
+  .price-card:not(.featured) .price-freq { color: #666; }
+  .price-card.featured .price-freq { color: rgba(255,255,255,0.7); }
+  .price-features { list-style: none; }
+  .price-features li { font-size: 13px; padding: 7px 0; border-bottom: 1px solid; display: flex; gap: 10px; align-items: flex-start; }
+  .price-card:not(.featured) .price-features li { color: #888; border-color: #2a2a28; }
+  .price-card.featured .price-features li { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.15); }
+  .price-features li:last-child { border-bottom: none; }
+  .price-features li::before { content: '—'; flex-shrink: 0; }
+  .price-card:not(.featured) .price-features li::before { color: #555; }
+  .price-card.featured .price-features li::before { color: var(--sage-light); }
+  .best-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--warm); color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 14px; white-space: nowrap; }
+  .addon-note { margin-top: 2rem; padding: 1.5rem 2rem; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+  .addon-note p { font-size: 13px; color: #777; }
+  .addon-note span { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--warm); }
+
+  /* QUALIFICATIONS */
+  .qualifications-section { background: var(--warm-light); }
+  .qual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .qual-group-title { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm); margin-bottom: 1.25rem; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .qual-item { display: flex; gap: 16px; padding: 1.25rem 1.5rem; background: var(--cream); border: 1px solid var(--border); margin-bottom: 12px; }
+  .qual-icon { width: 44px; height: 44px; flex-shrink: 0; background: var(--sage); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .qual-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .qual-issuer { font-size: 12px; color: var(--sage); margin-bottom: 2px; font-weight: 500; }
+  .qual-year { font-size: 11px; color: var(--muted); }
+  .qual-note { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  /* CONTACT */
+  .contact-section { background: var(--sage-light); display: grid; grid-template-columns: 1fr 1fr; min-height: 60vh; padding: 0; }
+  .contact-left { padding: 5rem 3rem; border-right: 1px solid var(--sage-mid); display: flex; flex-direction: column; justify-content: center; }
+  .contact-right { padding: 5rem 3rem; display: flex; flex-direction: column; justify-content: center; }
+  .contact-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; color: var(--ink); }
+  .contact-title em { font-style: italic; color: var(--sage); }
+  .contact-sub { font-size: 1rem; color: var(--muted); max-width: 380px; line-height: 1.8; margin-bottom: 2.5rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 14px; }
+  .contact-link { display: flex; align-items: center; gap: 14px; text-decoration: none; padding: 14px 18px; background: var(--cream); border: 1px solid var(--sage-mid); transition: border-color 0.2s, background 0.2s; color: var(--ink); }
+  .contact-link:hover { border-color: var(--sage); background: #fff; }
+  .contact-link-icon { width: 36px; height: 36px; background: var(--sage); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; color: #fff; font-weight: 700; }
+  .contact-link-text { font-size: 13px; font-weight: 500; }
+  .contact-link-sub { font-size: 11px; color: var(--muted); }
+  .about-block { padding: 2rem; background: var(--cream); border: 1px solid var(--sage-mid); }
+  .about-initials { width: 64px; height: 64px; background: var(--sage); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: #fff; margin-bottom: 1.25rem; }
+  .about-name { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--ink); margin-bottom: 4px; }
+  .about-role { font-size: 12px; color: var(--sage); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+  .about-bio { font-size: 13px; color: var(--muted); line-height: 1.75; margin-bottom: 1.25rem; }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .about-tag { font-size: 11px; padding: 3px 10px; border: 1px solid var(--sage-mid); color: var(--muted); }
+
+  /* FOOTER */
+  footer { background: var(--ink); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2a28; }
+  footer p { font-size: 12px; color: #555; }
+  footer span { font-size: 12px; color: #555; font-style: italic; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-left > * { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+  .hero-eyebrow { animation-delay: 0.1s; }
+  .hero-title { animation-delay: 0.25s; }
+  .hero-desc { animation-delay: 0.4s; }
+  .hero-cta { animation-delay: 0.55s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 3rem 1.5rem; border-right: none; border-bottom: 1px solid var(--border); }
+    .hero-right { padding: 2.5rem 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-item:nth-child(odd) { border-right: none; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .process-steps::before { display: none; }
+    .case-grid { grid-template-columns: 1fr; }
+    .case-before { border-right: none; border-bottom: 1px solid var(--border); }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .price-card { border-right: none; border-bottom: 1px solid #333; }
+    .contact-section { grid-template-columns: 1fr; }
+    .contact-left { border-right: none; border-bottom: 1px solid var(--sage-mid); padding: 3rem 1.5rem; }
+    .contact-right { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 8px; text-align: center; padding: 1.5rem; }
+    .qual-grid { grid-template-columns: 1fr; }
+    .cs-header { grid-template-columns: auto 1fr; }
+    .cs-status-pill { display: none; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .cs-tabs { overflow-x: auto; }
+    .tools-categories { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">IMA Health Records</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#cases">Case Studies</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#qualifications">Credentials</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding:0;">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Health Records Management</p>
+    <h1 class="hero-title">Your health history,<br><em>finally organized.</em></h1>
+    <p class="hero-desc">I turn scattered lab results, prescriptions, and doctor notes into a clean, accessible personal health system — so you walk into every appointment prepared, and your care team has the full picture.</p>
+    <a href="#contact" class="hero-cta">Get your records organized <span>→</span></a>
+  </div>
+  <div class="hero-right">
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Fully remote service</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">5–7</div>
+        <div class="stat-label">Days to full delivery</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">BSc</div>
+        <div class="stat-label">Health Records & Info Mgmt</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">HIPAA</div>
+        <div class="stat-label">Compliance Trained</div>
+      </div>
+    </div>
+    <ul class="credential-list">
+      <li>BSc Health Records & Information Management — KU</li>
+      <li>HIPAA Compliance Certified</li>
+      <li>ALX Certified Virtual Assistant</li>
+      <li>Proficient in data tools: SQL, Python (Pandas), Power BI</li>
+      <li>Strict client confidentiality — your data, your Drive</li>
+    </ul>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section class="problem-section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">The problem most people ignore</h2>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">📂</div>
+      <h3>Records everywhere</h3>
+      <p>Lab results on WhatsApp, prescriptions in a drawer, discharge notes in a bag. No single place they all live.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🏥</div>
+      <h3>Starting from zero, every appointment</h3>
+      <p>Each new doctor asks the same questions. You try to remember. You guess. Important history gets lost.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📈</div>
+      <h3>No visibility on trends</h3>
+      <p>Is your blood pressure improving? Has your creatinine changed? Without organized data, you genuinely cannot tell.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🌍</div>
+      <h3>Managing from a distance</h3>
+      <p>Living abroad and coordinating a parent's health in Kenya? Disorganized records make it stressful and dangerous.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">What I deliver for you</h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-item">
+      <span class="service-tag">Foundation</span>
+      <h3>Records audit & organization</h3>
+      <p>I collect everything you have — photos, PDFs, WhatsApp screenshots, scanned papers — and build a clean, clearly labelled digital folder sorted by category and date.</p>
+    </div>
+    <div class="service-item">
+      <span class="service-tag">The core deliverable</span>
+      <h3>Personal health summary</h3>
+      <p>A single-page document your doctor can read in 2 minutes. Conditions, medications, allergies, recent labs, key trends. The document that changes every appointment you have.</p>
+    </div>
+    <div class="service-item">
+      <span class="service-tag">For chronic conditions</span>
+      <h3>Trend tracking dashboard</h3>
+      <p>If you manage diabetes, hypertension, or any ongoing condition — I build you a visual dashboard tracking your numbers over time so you and your doctor can see the full picture.</p>
+    </div>
+    <div class="service-item">
+      <span class="service-tag">Ongoing</span>
+      <h3>Monthly record maintenance</h3>
+      <p>After your initial setup, you simply forward new results to me each month. I update your file and dashboard. You stay organized without lifting a finger.</p>
+    </div>
+    <div class="service-item">
+      <span class="service-tag">Remote families</span>
+      <h3>Family health file management</h3>
+      <p>Managing health for aging parents from abroad? I build and maintain a complete health file so you always have current, organized information no matter where you are.</p>
+    </div>
+    <div class="service-item">
+      <span class="service-tag">Corporate</span>
+      <h3>Employee wellness records benefit</h3>
+      <p>Offered to companies as a staff wellness benefit. Each employee gets their own organized personal health file — a benefit that actually gets used.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process-section" id="process">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">How it works</h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-circle">1</div>
+      <h4>You fill intake form</h4>
+      <p>5-minute form about your records and what you need. Takes no effort.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">2</div>
+      <h4>You send your records</h4>
+      <p>WhatsApp, email, Drive upload — whatever you have, however you have it.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">3</div>
+      <h4>I organize everything</h4>
+      <p>I sort, label, and structure it all into a clean digital system. 5–7 days.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">4</div>
+      <h4>I build your dashboard</h4>
+      <p>Your health summary and trend dashboard, ready to share with any doctor.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">5</div>
+      <h4>You receive everything</h4>
+      <p>Your folder and summary are shared to your own Google Drive. Yours forever.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO I HELP -->
+<section class="clients-section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Who this is for</h2>
+  </div>
+  <div class="client-cards">
+    <div class="client-card">
+      <h3>People managing chronic illness</h3>
+      <p>Diabetes, hypertension, thyroid conditions — anyone with ongoing labs and appointments who needs everything tracked in one place.</p>
+    </div>
+    <div class="client-card">
+      <h3>Kenyans abroad managing parents' health</h3>
+      <p>You're in the UK, US, or Canada. Your mother is in Nairobi with scattered records across three hospitals. I fix that remotely.</p>
+    </div>
+    <div class="client-card">
+      <h3>Post-surgery recovery patients</h3>
+      <p>Discharge notes, follow-up prescriptions, physiotherapy instructions — all organized so nothing critical gets missed.</p>
+    </div>
+    <div class="client-card">
+      <h3>Health-conscious professionals</h3>
+      <p>You do regular checkups but your results are scattered across apps, emails, and paper. One clean file changes everything.</p>
+    </div>
+    <div class="client-card">
+      <h3>Parents tracking children's health</h3>
+      <p>Vaccination records, school medical forms, allergy history, paediatrician visits — organized, printable, shareable.</p>
+    </div>
+    <div class="client-card">
+      <h3>Companies & HR teams</h3>
+      <p>Offer your staff a meaningful wellness benefit — their own personal health file, set up and maintained professionally.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BEFORE & AFTER + CASE STUDIES ===================== -->
+<section class="case-section" id="cases">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Before & after — real work</h2>
+  </div>
+
+  <p class="case-intro">
+    <strong>This is what transformation looks like.</strong> Below is the general before-and-after picture, followed by two real-world examples showing exactly how I structure patient records — the kind of organized system a doctor, specialist, or family member can rely on at a glance.
+  </p>
+
+  <!-- General before/after -->
+  <div class="case-grid">
+    <div class="case-before">
+      <div class="case-label">Before working with me</div>
+      <div class="case-item"><span>Lab results saved as WhatsApp photos from 3 different numbers</span></div>
+      <div class="case-item"><span>Old prescriptions in a bag — some expired, some not</span></div>
+      <div class="case-item"><span>Discharge summary from 2022 that no one can find</span></div>
+      <div class="case-item"><span>Three different doctors, none with the full picture</span></div>
+      <div class="case-item"><span>No idea if blood pressure has improved over the last year</span></div>
+      <div class="case-item"><span>Panic every time a new doctor asks for history</span></div>
+    </div>
+    <div class="case-after">
+      <div class="case-label">After working with me</div>
+      <div class="case-item"><span>All records in one organized Google Drive folder, clearly dated</span></div>
+      <div class="case-item"><span>Current medication list, always up to date</span></div>
+      <div class="case-item"><span>Every document found, scanned, and labelled</span></div>
+      <div class="case-item"><span>One-page health summary any doctor can read in 2 minutes</span></div>
+      <div class="case-item"><span>Visual trend dashboard showing 12 months of key metrics</span></div>
+      <div class="case-item"><span>Walk into every appointment calm and prepared</span></div>
+    </div>
+  </div>
+
+  <!-- ======= CASE STUDY 1: Post-Surgery Patient ======= -->
+  <div class="case-studies-title">
+    Real-world examples
+    <span class="cs-badge">Live dashboard previews</span>
+  </div>
+
+  <div class="cs-card">
+    <div class="cs-header">
+      <div class="cs-avatar">JM</div>
+      <div>
+        <div class="cs-patient-name">James M. — Post-Surgical Recovery</div>
+        <div class="cs-patient-meta">48 yrs · Male · Total Knee Replacement (Right) · KNH, Nairobi · Admitted: 3 Mar 2025 · Discharged: 8 Mar 2025</div>
+      </div>
+      <div class="cs-status-pill">🟢 Active Recovery — Week 11</div>
+    </div>
+    <div class="cs-body">
+      <div class="cs-tabs">
+        <button class="cs-tab active" onclick="switchTab(this,'jm-summary')">Health Summary</button>
+        <button class="cs-tab" onclick="switchTab(this,'jm-records')">All Records</button>
+        <button class="cs-tab" onclick="switchTab(this,'jm-rx')">Prescriptions</button>
+        <button class="cs-tab" onclick="switchTab(this,'jm-notes')">Doctor Notes</button>
+        <button class="cs-tab" onclick="switchTab(this,'jm-vitals')">Vitals Trend</button>
+      </div>
+
+      <!-- Summary -->
+      <div id="jm-summary" class="cs-panel active">
+        <div class="summary-grid">
+          <div class="summary-metric metric-good">
+            <div class="metric-label">Recovery Progress</div>
+            <div class="metric-value">78%</div>
+            <div class="metric-sub">Full ROM target: 120°</div>
+          </div>
+          <div class="summary-metric metric-good">
+            <div class="metric-label">Current ROM</div>
+            <div class="metric-value">94°</div>
+            <div class="metric-sub">Up from 62° at discharge</div>
+          </div>
+          <div class="summary-metric metric-warn">
+            <div class="metric-label">Pain Score (VAS)</div>
+            <div class="metric-value">3/10</div>
+            <div class="metric-sub">Improved from 8/10 post-op</div>
+          </div>
+          <div class="summary-metric">
+            <div class="metric-label">Active Medications</div>
+            <div class="metric-value">4</div>
+            <div class="metric-sub">2 to taper at Week 12</div>
+          </div>
+          <div class="summary-metric metric-good">
+            <div class="metric-label">Next Follow-Up</div>
+            <div class="metric-value">28 May</div>
+            <div class="metric-sub">Dr. Ochieng — Orthopaedics</div>
+          </div>
+          <div class="summary-metric">
+            <div class="metric-label">Physiotherapy Sessions</div>
+            <div class="metric-value">18/24</div>
+            <div class="metric-sub">6 sessions remaining</div>
+          </div>
+        </div>
+        <div style="background:var(--sage-light);border:1px solid var(--sage-mid);padding:1.25rem 1.5rem;font-size:13px;color:var(--ink);line-height:1.7;">
+          <strong style="color:var(--sage);font-size:11px;letter-spacing:0.07em;text-transform:uppercase;">Clinical Summary</strong><br>
+          James underwent an elective right total knee arthroplasty (TKA) for end-stage osteoarthritis. Surgery was uncomplicated; no intraoperative blood transfusion required. Discharged Day 5 post-op on oral anticoagulation and physiotherapy protocol. Wound healed without infection. Currently in active physiotherapy — achieving consistent ROM gains. Cleared for weight-bearing as tolerated. Blood parameters within normal limits at 6-week check. Anticoagulation to conclude at Week 12.
+        </div>
+      </div>
+
+      <!-- Records -->
+      <div id="jm-records" class="cs-panel">
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Document</th>
+              <th>Type</th>
+              <th>Provider / Facility</th>
+              <th>Key Finding</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>3 Mar 2025</td><td>Pre-op Full Blood Count</td><td><span class="rec-badge rec-lab">Lab</span></td><td>KNH — Dr. Njoroge</td><td>Hb 13.4 g/dL · WBC normal · Cleared for surgery</td></tr>
+            <tr><td>3 Mar 2025</td><td>Pre-op ECG</td><td><span class="rec-badge rec-imaging">Imaging</span></td><td>KNH Cardiology</td><td>Normal sinus rhythm · No contraindications</td></tr>
+            <tr><td>3 Mar 2025</td><td>Anaesthesia Consent & Assessment</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Kamau (Anaesthetist)</td><td>ASA Class II · Spinal anaesthesia planned</td></tr>
+            <tr><td>3 Mar 2025</td><td>Surgical Report — Right TKA</td><td><span class="rec-badge rec-note">Surgical</span></td><td>Dr. Ochieng — KNH Ortho</td><td>Uncomplicated. Cemented prosthesis. Est. blood loss 320ml</td></tr>
+            <tr><td>8 Mar 2025</td><td>Discharge Summary</td><td><span class="rec-badge rec-discharge">Discharge</span></td><td>KNH</td><td>Wound healing. ROM 62°. DVT prophylaxis prescribed</td></tr>
+            <tr><td>8 Mar 2025</td><td>Discharge Prescriptions (×4)</td><td><span class="rec-badge rec-rx">Rx</span></td><td>KNH Pharmacy</td><td>Rivaroxaban, Tramadol, Diclofenac, Omeprazole</td></tr>
+            <tr><td>19 Mar 2025</td><td>Wound Review & Suture Removal</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Ochieng — Clinic</td><td>Clean wound. Sutures removed. ROM 72°. Continue physio</td></tr>
+            <tr><td>28 Mar 2025</td><td>X-Ray — Right Knee AP + Lateral</td><td><span class="rec-badge rec-imaging">Imaging</span></td><td>KNH Radiology</td><td>Prosthesis well-positioned. No loosening. Good alignment</td></tr>
+            <tr><td>8 Apr 2025</td><td>6-Week Follow-Up Labs</td><td><span class="rec-badge rec-lab">Lab</span></td><td>Nairobi Hospital</td><td>INR 1.2 · CRP 8 (↓ from 42) · FBC normal</td></tr>
+            <tr><td>8 Apr 2025</td><td>6-Week Clinical Review</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Ochieng</td><td>ROM 84°. Pain 4/10. Rivaroxaban to continue 2 more weeks</td></tr>
+            <tr><td>2 May 2025</td><td>Physiotherapy Progress Note</td><td><span class="rec-badge rec-note">Physio</span></td><td>Chanzi Physio Centre — Grace Otieno</td><td>ROM 94°. Gait improved. 6 sessions remaining</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Prescriptions -->
+      <div id="jm-rx" class="cs-panel">
+        <div class="rx-list">
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Rivaroxaban 10 mg</div>
+              <div class="rx-detail">Once daily after food · DVT prophylaxis · Prescribed: 8 Mar 2025 · <strong>Stop date: 17 May 2025 (Week 12)</strong></div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Tramadol 50 mg</div>
+              <div class="rx-detail">Every 8 hrs as needed for pain · Taper from Week 10 · Prescribed: 8 Mar 2025</div>
+            </div>
+            <div class="rx-status rx-active">Tapering</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Diclofenac 50 mg</div>
+              <div class="rx-detail">Twice daily with food · Anti-inflammatory · Prescribed: 8 Mar 2025</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Omeprazole 20 mg</div>
+              <div class="rx-detail">Once daily before breakfast · Gastro-protection (co-prescribed with NSAIDs)</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes timeline -->
+      <div id="jm-notes" class="cs-panel">
+        <div class="notes-timeline">
+          <div class="note-entry">
+            <div class="note-date">2 May 2025 — Physiotherapy Progress</div>
+            <div class="note-title">Week 9 Physiotherapy Review — Grace Otieno, Chanzi Physio Centre</div>
+            <div class="note-body">Patient achieving consistent ROM gains. Currently at 94° flexion. Walking without aids on flat surfaces. Staircase navigation improving — able to negotiate stairs with single rail support. Recommended completion of remaining 6 sessions before final orthopaedic discharge review.</div>
+          </div>
+          <div class="note-entry">
+            <div class="note-date">8 Apr 2025 — 6-Week Orthopaedic Review</div>
+            <div class="note-title">6-Week Post-Op Review — Dr. Ochieng, KNH Orthopaedics</div>
+            <div class="note-body">Wound fully healed. ROM 84° — progressing well. Pain now 4/10 at rest. CRP trending down significantly (42 → 8), indicating resolving inflammation. Advised continuation of Rivaroxaban for 2 additional weeks. Cleared to increase physiotherapy intensity. Next review in 7 weeks for consideration of prosthetic assessment X-ray.</div>
+          </div>
+          <div class="note-entry">
+            <div class="note-date">19 Mar 2025 — 2-Week Wound Review</div>
+            <div class="note-title">Wound Review & Suture Removal — Dr. Ochieng</div>
+            <div class="note-body">Clean, dry wound with no signs of infection or dehiscence. Sutures removed. ROM 72° — physiotherapy to be intensified. Patient compliant with DVT prophylaxis. Advised to avoid prolonged sitting positions. Pain well-controlled on current regimen. Family educated on warning signs: redness, swelling, fever — instructed to return immediately if any occur.</div>
+          </div>
+          <div class="note-entry">
+            <div class="note-date">8 Mar 2025 — Discharge</div>
+            <div class="note-title">Discharge Summary — KNH Orthopaedics Ward</div>
+            <div class="note-body">Patient discharged Day 5 post-op in stable condition. Wound clean and intact. Mobilizing with crutches. Prescribed 4 medications (see prescriptions tab). Detailed physiotherapy programme provided. Wound review in 2 weeks. Patient and caregiver educated on physiotherapy exercises, DVT precautions, and medication schedule. Emergency contact provided.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vitals trend -->
+      <div id="jm-vitals" class="cs-panel">
+        <div class="trend-label-row">
+          <div class="trend-title">Pain Score (VAS 0–10) — Post-Op Recovery Trend</div>
+          <div class="trend-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--warm)"></div> Pain VAS</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div> ROM (°/10)</div>
+          </div>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-group"><div class="bar bar-systolic" style="height:80%" data-val="8/10 Pain"></div><div class="bar bar-diastolic" style="height:62%" data-val="62° ROM"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:65%" data-val="6.5/10"></div><div class="bar bar-diastolic" style="height:68%" data-val="68°"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:55%" data-val="5.5/10"></div><div class="bar bar-diastolic" style="height:72%" data-val="72°"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:45%" data-val="4.5/10"></div><div class="bar bar-diastolic" style="height:78%" data-val="78°"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:40%" data-val="4/10"></div><div class="bar bar-diastolic" style="height:84%" data-val="84°"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:35%" data-val="3.5/10"></div><div class="bar bar-diastolic" style="height:88%" data-val="88°"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:30%" data-val="3/10"></div><div class="bar bar-diastolic" style="height:94%" data-val="94°"></div></div>
+        </div>
+        <div class="bar-month-labels">
+          <div class="month-label">Discharge<br>8 Mar</div>
+          <div class="month-label">Wk 2</div>
+          <div class="month-label">Wk 3</div>
+          <div class="month-label">Wk 5</div>
+          <div class="month-label">6-Wk Review</div>
+          <div class="month-label">Wk 8</div>
+          <div class="month-label">Wk 9</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:1rem;padding:10px 14px;background:var(--sage-light);border:1px solid var(--sage-mid);">
+          📈 <strong>Trend summary:</strong> Pain score improving steadily from 8/10 at discharge to 3/10 at Week 9. Range of motion increasing consistently from 62° to 94° — on track to achieve target of 120° by Week 16.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= CASE STUDY 2: Hypertension Management ======= -->
+  <div class="cs-card">
+    <div class="cs-header">
+      <div class="cs-avatar" style="background:var(--blue);">GW</div>
+      <div>
+        <div class="cs-patient-name">Grace W. — Hypertension Management</div>
+        <div class="cs-patient-meta">61 yrs · Female · Essential Hypertension + Stage 2 CKD · Diagnosed: 2019 · Records organized from: Jan 2024</div>
+      </div>
+      <div class="cs-status-pill" style="background:rgba(37,99,168,0.2);color:#6ba3e8;border-color:rgba(37,99,168,0.3);">🔵 Ongoing Management</div>
+    </div>
+    <div class="cs-body">
+      <div class="cs-tabs">
+        <button class="cs-tab active" onclick="switchTab(this,'gw-summary')">Health Summary</button>
+        <button class="cs-tab" onclick="switchTab(this,'gw-records')">All Records</button>
+        <button class="cs-tab" onclick="switchTab(this,'gw-rx')">Prescriptions</button>
+        <button class="cs-tab" onclick="switchTab(this,'gw-notes')">Doctor Notes</button>
+        <button class="cs-tab" onclick="switchTab(this,'gw-bp')">BP Trend</button>
+      </div>
+
+      <!-- Summary -->
+      <div id="gw-summary" class="cs-panel active">
+        <div class="summary-grid">
+          <div class="summary-metric metric-warn">
+            <div class="metric-label">Last BP Reading</div>
+            <div class="metric-value">138/88</div>
+            <div class="metric-sub">May 2025 · Target: &lt;130/80</div>
+          </div>
+          <div class="summary-metric metric-warn">
+            <div class="metric-label">eGFR (Kidney Function)</div>
+            <div class="metric-value">52</div>
+            <div class="metric-sub">Stage 3a CKD · Stable 6 months</div>
+          </div>
+          <div class="summary-metric metric-good">
+            <div class="metric-label">Cholesterol (LDL)</div>
+            <div class="metric-value">3.1 mmol</div>
+            <div class="metric-sub">Target met · On statin therapy</div>
+          </div>
+          <div class="summary-metric">
+            <div class="metric-label">Creatinine</div>
+            <div class="metric-value">148 μmol</div>
+            <div class="metric-sub">Stable · Monitor 3-monthly</div>
+          </div>
+          <div class="summary-metric metric-good">
+            <div class="metric-label">Active Medications</div>
+            <div class="metric-value">5</div>
+            <div class="metric-sub">Last reviewed Apr 2025</div>
+          </div>
+          <div class="summary-metric">
+            <div class="metric-label">Next Appointment</div>
+            <div class="metric-value">10 Jun</div>
+            <div class="metric-sub">Dr. Mwangi — Nephrology</div>
+          </div>
+        </div>
+        <div style="background:var(--blue-light);border:1px solid #c0d4f0;padding:1.25rem 1.5rem;font-size:13px;color:var(--ink);line-height:1.7;">
+          <strong style="color:var(--blue);font-size:11px;letter-spacing:0.07em;text-transform:uppercase;">Clinical Summary</strong><br>
+          Grace has a 6-year history of essential hypertension, managed pharmacologically since 2019. Stage 2 CKD was identified in 2022 and has progressed to Stage 3a as of late 2024 — currently stable. On a 5-drug regimen optimized for renal protection. Lipid control achieved. Regular lab monitoring in place. Lifestyle modifications discussed at every visit; sodium-restricted diet partially compliant. No acute hypertensive episodes recorded in 2025.
+        </div>
+      </div>
+
+      <!-- Records -->
+      <div id="gw-records" class="cs-panel">
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Document</th>
+              <th>Type</th>
+              <th>Provider</th>
+              <th>Key Result / Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Jan 2024</td><td>Comprehensive Metabolic Panel</td><td><span class="rec-badge rec-lab">Lab</span></td><td>Nairobi Hospital</td><td>Creatinine 142 · eGFR 54 · Na 138 · K 4.2</td></tr>
+            <tr><td>Jan 2024</td><td>Annual Cardiology Review</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Mwangi</td><td>BP 152/96. Added Amlodipine to regimen. Dietary counselling given</td></tr>
+            <tr><td>Mar 2024</td><td>Urine Protein:Creatinine Ratio</td><td><span class="rec-badge rec-lab">Lab</span></td><td>Aga Khan Lab</td><td>PCR 68 mg/mmol — microalbuminuria confirmed</td></tr>
+            <tr><td>Mar 2024</td><td>Renal Ultrasound</td><td><span class="rec-badge rec-imaging">Imaging</span></td><td>Aga Khan Hospital</td><td>Both kidneys mildly reduced in size — consistent with CKD. No obstruction</td></tr>
+            <tr><td>Apr 2024</td><td>Nephrology Referral & Consultation</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Kimani — Nephrology</td><td>CKD Stage 3a confirmed. Prescription adjusted. Nephrotoxins to avoid listed</td></tr>
+            <tr><td>Jun 2024</td><td>Lipid Profile</td><td><span class="rec-badge rec-lab">Lab</span></td><td>Nairobi Hospital</td><td>LDL 4.2 mmol (HIGH) · Rosuvastatin initiated</td></tr>
+            <tr><td>Aug 2024</td><td>Follow-Up Labs + BP Review</td><td><span class="rec-badge rec-lab">Lab</span></td><td>Dr. Mwangi Clinic</td><td>BP 144/90. Creatinine stable. Potassium 4.5 (acceptable)</td></tr>
+            <tr><td>Oct 2024</td><td>ECG — Annual Cardiovascular Screen</td><td><span class="rec-badge rec-imaging">Imaging</span></td><td>Nairobi Hospital</td><td>LVH features noted. Echo recommended at next review</td></tr>
+            <tr><td>Nov 2024</td><td>Echocardiogram</td><td><span class="rec-badge rec-imaging">Imaging</span></td><td>Nairobi Hospital Cardiology</td><td>Concentric LVH. EF 62% (preserved). No valvular disease</td></tr>
+            <tr><td>Jan 2025</td><td>Annual Comprehensive Labs</td><td><span class="rec-badge rec-lab">Lab</span></td><td>Nairobi Hospital</td><td>Creatinine 148 · eGFR 52 · LDL 3.1 ✓ (improved) · HbA1c 5.4 (normal)</td></tr>
+            <tr><td>Jan 2025</td><td>Annual Review & Prescription Renewal</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Mwangi</td><td>BP 140/88. All 5 medications continued. Encouraged DASH diet compliance</td></tr>
+            <tr><td>Apr 2025</td><td>Routine BP Monitoring Visit</td><td><span class="rec-badge rec-note">Note</span></td><td>Dr. Mwangi Clinic</td><td>BP 138/88 — slight improvement. Labs ordered for Jun review</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Prescriptions -->
+      <div id="gw-rx" class="cs-panel">
+        <div style="font-size:12px;color:var(--muted);background:var(--blue-light);border:1px solid #c0d4f0;padding:10px 14px;margin-bottom:1.25rem;">
+          ⚠️ <strong>Renal note:</strong> NSAIDs, aminoglycosides, and contrast agents should be avoided. Dosing adjustments required for any new medications due to CKD Stage 3a (eGFR 52). Always inform treating doctors of kidney disease status.
+        </div>
+        <div class="rx-list">
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Losartan 100 mg</div>
+              <div class="rx-detail">Once daily · ARB — renal protection + BP control · Since 2019 · Last reviewed Apr 2025</div>
+              <div class="rx-detail" style="margin-top:3px;color:#888;">Monitor potassium and creatinine every 3 months</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Amlodipine 10 mg</div>
+              <div class="rx-detail">Once daily · Calcium channel blocker · Added Jan 2024 for further BP reduction</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Furosemide 40 mg</div>
+              <div class="rx-detail">Once daily (morning) · Loop diuretic for fluid management · Since 2021</div>
+              <div class="rx-detail" style="margin-top:3px;color:#888;">Caution: monitor electrolytes; increase water intake</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Rosuvastatin 20 mg</div>
+              <div class="rx-detail">Once daily at bedtime · Statin for dyslipidaemia · Initiated Jun 2024 · LDL now at target</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item">
+            <div class="rx-icon">💊</div>
+            <div>
+              <div class="rx-name">Low-dose Aspirin 75 mg</div>
+              <div class="rx-detail">Once daily after food · Cardiovascular risk reduction · Since 2022</div>
+            </div>
+            <div class="rx-status rx-active">Active</div>
+          </div>
+          <div class="rx-item" style="opacity:0.6;">
+            <div class="rx-icon" style="background:#f5f5f3;">💊</div>
+            <div>
+              <div class="rx-name">Hydrochlorothiazide 12.5 mg</div>
+              <div class="rx-detail">Discontinued Apr 2024 · Replaced by Amlodipine due to reduced efficacy in CKD</div>
+            </div>
+            <div class="rx-status rx-ended">Discontinued</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div id="gw-notes" class="cs-panel">
+        <div class="notes-timeline">
+          <div class="note-entry">
+            <div class="note-date">Apr 2025 — Routine Review</div>
+            <div class="note-title">BP Monitoring & Prescription Renewal — Dr. Mwangi</div>
+            <div class="note-body">BP 138/88 mmHg — modest improvement from Jan reading. Feeling well; no dizziness or ankle swelling. Weight stable at 72 kg. Patient reports improved adherence to low-sodium diet. All 5 medications continued at current doses. Comprehensive labs scheduled for June 2025 before nephrology review. Encouraged continued daily home BP monitoring — readings to be logged and brought to next visit.</div>
+          </div>
+          <div class="note-entry">
+            <div class="note-date">Nov 2024 — Echocardiogram Result</div>
+            <div class="note-title">Echo Review — Nairobi Hospital Cardiology</div>
+            <div class="note-body">Echocardiogram confirms concentric left ventricular hypertrophy (LVH) — consistent with longstanding hypertension. Ejection fraction 62% (preserved function — reassuring). No valvular disease or pericardial effusion. Cardiologist recommends optimal BP control to prevent progression. Annual echo recommended. Result shared with Dr. Mwangi for co-management.</div>
+          </div>
+          <div class="note-entry">
+            <div class="note-date">Apr 2024 — Nephrology Consultation</div>
+            <div class="note-title">Nephrology Assessment — Dr. Kimani, Aga Khan Hospital</div>
+            <div class="note-body">CKD Stage 3a confirmed based on eGFR 54 and persistent microalbuminuria. Prescription adjusted — Hydrochlorothiazide discontinued; Amlodipine added for better BP control in CKD. Patient educated on nephrotoxins to avoid: NSAIDs, herbal remedies, IV contrast without pre-hydration, and aminoglycoside antibiotics. Dietary protein restriction discussed. Low-potassium diet not yet required but to monitor. Referral to dietitian issued.</div>
+          </div>
+          <div class="note-entry">
+            <div class="note-date">Jan 2024 — Annual Review</div>
+            <div class="note-title">Annual Cardiology Review — Dr. Mwangi</div>
+            <div class="note-body">BP remains elevated at 152/96 despite dual therapy. Third antihypertensive (Amlodipine) added to regimen. Recent blood tests show stable renal function but creatinine slowly trending up — nephrology review recommended. LDL elevated; lipid management to be addressed at next visit. Weight 73 kg. Patient counselled extensively on sodium restriction and the DASH diet. Home BP monitor recommended.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BP Trend -->
+      <div id="gw-bp" class="cs-panel">
+        <div class="trend-label-row">
+          <div class="trend-title">Blood Pressure Trend — Jan 2024 to May 2025</div>
+          <div class="trend-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div> Systolic</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--sage-mid)"></div> Diastolic</div>
+          </div>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-group"><div class="bar bar-systolic" style="height:95%" data-val="152 sys"></div><div class="bar bar-diastolic" style="height:80%" data-val="96 dia"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:88%" data-val="148 sys"></div><div class="bar bar-diastolic" style="height:76%" data-val="92 dia"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:90%" data-val="150 sys"></div><div class="bar bar-diastolic" style="height:78%" data-val="94 dia"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:84%" data-val="144 sys"></div><div class="bar bar-diastolic" style="height:73%" data-val="90 dia"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:80%" data-val="140 sys"></div><div class="bar bar-diastolic" style="height:70%" data-val="88 dia"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:78%" data-val="138 sys"></div><div class="bar bar-diastolic" style="height:68%" data-val="86 dia"></div></div>
+          <div class="bar-group"><div class="bar bar-systolic" style="height:76%" data-val="138 sys"></div><div class="bar bar-diastolic" style="height:68%" data-val="88 dia"></div></div>
+        </div>
+        <div class="bar-month-labels">
+          <div class="month-label">Jan '24</div>
+          <div class="month-label">Mar '24</div>
+          <div class="month-label">Apr '24</div>
+          <div class="month-label">Aug '24</div>
+          <div class="month-label">Jan '25</div>
+          <div class="month-label">Mar '25</div>
+          <div class="month-label">May '25</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.25rem;">
+          <div style="background:var(--sage-light);border:1px solid var(--sage-mid);padding:12px 14px;font-size:12px;color:var(--ink);">
+            📉 <strong>Systolic trend:</strong> Reduced from 152 to 138 mmHg over 16 months — a 14-point improvement following addition of Amlodipine and nephrology-led medication review.
+          </div>
+          <div style="background:var(--warm-light);border:1px solid var(--border);padding:12px 14px;font-size:12px;color:var(--ink);">
+            🎯 <strong>Target:</strong> &lt;130/80 mmHg. Current reading 138/88 — further reduction required. Lifestyle modification discussion at every visit.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS SECTION -->
+<section class="tools-section" id="tools">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title" style="color:var(--cream);">Tools & technology stack</h2>
+  </div>
+  <p class="tools-intro">These are the tools I use to organize, manage, visualize, and secure health records — all combined to deliver a system that is professional, private, and genuinely easy for you and your care team to use.</p>
+  <div class="tools-categories">
+    <div class="tools-cat">
+      <div class="tools-cat-label">📁 Records & Organization</div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Google Workspace</div><div class="tool-desc">Drive, Sheets & Forms — primary client file system</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Airtable</div><div class="tool-desc">Relational records database & patient log management</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">PDF Tools</div><div class="tool-desc">Adobe Acrobat / Smallpdf — document scanning, merging & annotation</div></div></div>
+    </div>
+    <div class="tools-cat">
+      <div class="tools-cat-label">📊 Data & Dashboards</div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Looker Studio</div><div class="tool-desc">Interactive health trend dashboards & data visualizations</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Microsoft Power BI</div><div class="tool-desc">Advanced analytics and multi-patient data reporting</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Python (Pandas)</div><div class="tool-desc">Data cleaning, trend analysis and lab value processing</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">SQL (PostgreSQL / MySQL)</div><div class="tool-desc">Structured data queries for multi-record analysis</div></div></div>
+    </div>
+    <div class="tools-cat">
+      <div class="tools-cat-label">📋 Intake & Forms</div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Tally.so</div><div class="tool-desc">Client intake forms — clean, HIPAA-aware design</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Google Forms</div><div class="tool-desc">Health questionnaires, consent forms & surveys</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Typeform</div><div class="tool-desc">Conversational intake for complex medical histories</div></div></div>
+    </div>
+    <div class="tools-cat">
+      <div class="tools-cat-label">💬 Communication & Scheduling</div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">WhatsApp Business</div><div class="tool-desc">Secure file receipt & client communication</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Gmail (Custom Domain)</div><div class="tool-desc">Professional client correspondence & file delivery</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Calendly</div><div class="tool-desc">Client onboarding & follow-up appointment scheduling</div></div></div>
+    </div>
+    <div class="tools-cat">
+      <div class="tools-cat-label">⚙️ Automation</div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Zapier</div><div class="tool-desc">Automated intake-to-file workflows & reminders</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Make (Integromat)</div><div class="tool-desc">Advanced multi-step automation for record updates</div></div></div>
+    </div>
+    <div class="tools-cat">
+      <div class="tools-cat-label">🔒 Security & Compliance</div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">1Password / LastPass</div><div class="tool-desc">Encrypted credential management for all client access</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">Google Authenticator</div><div class="tool-desc">2FA enabled on all systems holding client data</div></div></div>
+      <div class="tool-item"><div class="tool-dot"></div><div><div class="tool-name">HIPAA Protocols</div><div class="tool-desc">Data handling, access control & retention policies</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Simple, transparent pricing</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <div class="price-name">Basic Organizer</div>
+      <div class="price-amount">KSh 2,500</div>
+      <div class="price-freq">one-time</div>
+      <ul class="price-features">
+        <li>Full records sorting & labelling</li>
+        <li>Clean Google Drive folder structure</li>
+        <li>Delivered in 5–7 days</li>
+        <li>Best for healthy individuals wanting order</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="best-badge">Most popular</div>
+      <div class="price-tier">Complete</div>
+      <div class="price-name">Full Setup + Dashboard</div>
+      <div class="price-amount">KSh 6,000</div>
+      <div class="price-freq">one-time</div>
+      <ul class="price-features">
+        <li>Everything in Basic</li>
+        <li>One-page health summary document</li>
+        <li>Trend tracking dashboard setup</li>
+        <li>Screen-recorded walkthrough video</li>
+        <li>Best for chronic conditions or aging parents</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Ongoing</div>
+      <div class="price-name">Monthly Maintenance</div>
+      <div class="price-amount">KSh 1,500</div>
+      <div class="price-freq">per month — after initial setup</div>
+      <ul class="price-features">
+        <li>Monthly file updates with new records</li>
+        <li>Dashboard trend updates</li>
+        <li>Summary kept current</li>
+        <li>You just forward new results — I do the rest</li>
+      </ul>
+    </div>
+  </div>
+  <div class="addon-note">
+    <div>
+      <p style="color: var(--cream); font-weight: 500; font-size: 14px; margin-bottom: 4px;">Corporate / family packages</p>
+      <p>Staff wellness benefit programs, multi-person family health files, or clinic partnerships — custom pricing available.</p>
+    </div>
+    <span>Contact for quote →</span>
+  </div>
+</section>
+
+<!-- QUALIFICATIONS -->
+<section class="qualifications-section" id="qualifications">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Qualifications & certifications</h2>
+  </div>
+  <p style="font-size:14px;color:var(--muted);max-width:600px;margin-bottom:2.5rem;line-height:1.7;">My work sits at the intersection of clinical knowledge and data systems. These credentials mean that when I organize your records, I understand what they say — and how to present them in a way that is medically accurate, professionally structured, and secure.</p>
+  <div class="qual-grid">
+    <div>
+      <div class="qual-group-title">🎓 Academic Degrees</div>
+      <div class="qual-item">
+        <div class="qual-icon">🎓</div>
+        <div>
+          <div class="qual-name">BSc Health Records & Information Management with IT</div>
+          <div class="qual-issuer">Kenyatta University, Nairobi</div>
+          <div class="qual-year">Degree · Nairobi, Kenya</div>
+          <div class="qual-note">Covers clinical coding, patient data management, health informatics, hospital information systems, and health data analysis.</div>
+        </div>
+      </div>
+      <div class="qual-group-title" style="margin-top:1.5rem;">📜 Professional Certifications</div>
+      <div class="qual-item">
+        <div class="qual-icon" style="background:#c0392b;">🔐</div>
+        <div>
+          <div class="qual-name">HIPAA Compliance Certification</div>
+          <div class="qual-issuer">Health Insurance Portability & Accountability Act</div>
+          <div class="qual-year">Privacy, Security & Breach Notification Rules</div>
+          <div class="qual-note">Trained in protected health information (PHI) handling, data access controls, and patient privacy standards as required in health records management.</div>
+        </div>
+      </div>
+      <div class="qual-item">
+        <div class="qual-icon" style="background:#2563a8;">💻</div>
+        <div>
+          <div class="qual-name">Virtual Assistant Professional Certificate</div>
+          <div class="qual-issuer">ALX Africa</div>
+          <div class="qual-year">Digital Tools · Remote Work · Admin Management</div>
+          <div class="qual-note">Covers digital tools, remote client management, scheduling systems, document handling, and professional virtual service delivery.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="qual-group-title">🖥️ Technical Training</div>
+      <div class="qual-item">
+        <div class="qual-icon" style="background:#4a4a42;">🖥️</div>
+        <div>
+          <div class="qual-name">Computer Packages</div>
+          <div class="qual-issuer">Microsoft Office Suite · Google Workspace</div>
+          <div class="qual-year">Word, Excel, PowerPoint, Outlook, Access</div>
+          <div class="qual-note">Proficient in full Microsoft Office Suite and Google Workspace, including advanced Excel and Sheets for data organization and analysis.</div>
+        </div>
+      </div>
+      <div class="qual-group-title" style="margin-top:1.5rem;">🔧 Specialist Skills</div>
+      <div class="qual-item">
+        <div class="qual-icon" style="background:var(--sage);">📊</div>
+        <div>
+          <div class="qual-name">Health Data Analysis & Visualization</div>
+          <div class="qual-issuer">SQL · Python (Pandas) · Power BI · Looker Studio</div>
+          <div class="qual-year">Applied to clinical records and health trend tracking</div>
+          <div class="qual-note">Able to process lab data, identify trends in chronic condition management, and build dashboards that communicate health status clearly to both patients and clinicians.</div>
+        </div>
+      </div>
+      <div class="qual-item">
+        <div class="qual-icon" style="background:var(--warm);">🏥</div>
+        <div>
+          <div class="qual-name">Clinical Coding & Health Informatics</div>
+          <div class="qual-issuer">ICD-10 · Medical Terminology · HMIS</div>
+          <div class="qual-year">Core component of BSc curriculum — KU</div>
+          <div class="qual-note">Understanding of how diagnoses, procedures, and medications are classified and recorded — critical for accurately organizing and summarizing patient records.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-left">
+    <h2 class="contact-title">Ready to get your records <em>in order?</em></h2>
+    <p class="contact-sub">Send me a message on WhatsApp or email and I'll send you the intake form. The whole process starts with one conversation.</p>
+    <div class="contact-links">
+      <a href="https://wa.me/254715250869" class="contact-link" target="_blank">
+        <div class="contact-link-icon">W</div>
+        <div>
+          <div class="contact-link-text">WhatsApp</div>
+          <div class="contact-link-sub">+254 715 250 869</div>
+        </div>
+      </a>
+      <a href="mailto:irenemagdaline083@gmail.com" class="contact-link">
+        <div class="contact-link-icon">@</div>
+        <div>
+          <div class="contact-link-text">Email</div>
+          <div class="contact-link-sub">irenemagdaline083@gmail.com</div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="contact-right">
+    <div class="about-block">
+      <div class="about-initials">IMA</div>
+      <div class="about-name">Irene Magdaline Awuor</div>
+      <div class="about-role">Health Records Organizer & Virtual Health Assistant</div>
+      <p class="about-bio">I hold a BSc in Health Records & Information Management with IT from Kenyatta University, and am certified in HIPAA Compliance and Virtual Assistance (ALX). I combine deep clinical records knowledge with data systems expertise to give individuals something that barely exists in Kenya — a proper, organized, usable personal health file. I work fully online. No office visits. No face-to-camera content. Just thorough, professional work delivered to your inbox.</p>
+      <div class="about-tags">
+        <span class="about-tag">BSc Health Records — KU</span>
+        <span class="about-tag">HIPAA Certified</span>
+        <span class="about-tag">ALX Virtual Assistant</span>
+        <span class="about-tag">SQL · Python · Power BI</span>
+        <span class="about-tag">Looker Studio · Airtable</span>
+        <span class="about-tag">Nairobi, Kenya</span>
+        <span class="about-tag">Remote worldwide</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Irene Magdaline Awuor — Health Records Management</p>
+  <span>Nairobi, Kenya · Serving clients worldwide</span>
+</footer>
+
+<script>
+function switchTab(btn, panelId) {
+  // Get the card this tab belongs to
+  const tabContainer = btn.parentElement;
+  const cardBody = tabContainer.parentElement;
+
+  // Deactivate all tabs in this card
+  tabContainer.querySelectorAll('.cs-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Deactivate all panels in this card
+  cardBody.querySelectorAll('.cs-panel').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(panelId);
+  if (target) target.classList.add('active');
+}
+</script>
+</body>
+</html>
